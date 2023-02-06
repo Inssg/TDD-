@@ -20,20 +20,23 @@ public class ProductApiTest extends ApiTest {
 
     @Test
     void 상품등록() {
-        final AddProductRequest request = 상품등록요청_생성();
+        final var request = 상품등록요청_생성();
 
         //요청을 보내는 로그를 남긴다
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        final var response = 상품등록요청(request);
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+
+    }
+
+    private static ExtractableResponse<Response> 상품등록요청(AddProductRequest request) {
+        return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)
                 .when()
                 .post("/products")
                 .then()
                 .log().all().extract();
-
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-
-        productService.addProduct(request);
     }
 
     private static AddProductRequest 상품등록요청_생성() {
