@@ -9,15 +9,22 @@ public class ProductServiceTest {
     상품등록() {
         final String name = "상품명";
         final int price = 1000;
-      final  AddProductRequest request = new AddProductRequest("상품명", 1000);
+        final DiscountPolicy discountPolicy = DiscountPolicy.NONE;
+      final  AddProductRequest request = new AddProductRequest("상품명", 1000, discountPolicy);
         productService.addProduct(request);
     }
 
-    private class AddProductRequst{
-        public AddProductRequst(final String name, final int price) {
+    private class AddProductRequest{
+        public AddProductRequest(final String name, final int price) {
             throw new UnsupportedOperationException("Unspported AddProductRequest");
         }
     }
+    private enum DiscountPolicy{
+
+        NONE
+    }
+
+
 
 
 
