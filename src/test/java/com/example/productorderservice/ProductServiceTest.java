@@ -32,7 +32,10 @@ public class ProductServiceTest {
         }
     private class ProductService {
 
-        public void addProduct(AddProductRequest request) {
+        public void addProduct(final AddProductRequest request) {
+            final Product product = new Product(request.name(), request.price(), request.discountPolicy);
+
+            productPort.save(product);
         }
     }
     private enum DiscountPolicy{
@@ -41,5 +44,16 @@ public class ProductServiceTest {
     }
 
 
+    private class Product {
+        private final String name;
+        private final int price;
+        private final DiscountPolicy discountPolicy;
 
+        public Product(String name, int price, DiscountPolicy discountPolicy) {
+
+            this.name = name;
+            this.price = price;
+            this.discountPolicy = discountPolicy;
+        }
+    }
 }
