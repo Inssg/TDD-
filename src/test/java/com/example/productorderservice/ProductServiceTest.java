@@ -1,17 +1,21 @@
 package com.example.productorderservice;
 
-import org.apache.catalina.Store;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProductServiceTest {
 
     private ProductService productService;
+    private ProductPort productPort;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService();
+        productPort = new ProductAdapter();
+        productService = new ProductService(productPort);
     }
 
 
@@ -33,7 +37,11 @@ public class ProductServiceTest {
         }
     private class ProductService {
 
-        private ProductPort productPort;
+        private final ProductPort productPort;
+
+        private ProductService(ProductPort productPort) {
+            this.productPort = productPort;
+        }
 
         public void addProduct(final AddProductRequest request) {
             final Product product = new Product(request.name(), request.price(), request.discountPolicy);
@@ -51,6 +59,7 @@ public class ProductServiceTest {
         private final String name;
         private final int price;
         private final DiscountPolicy discountPolicy;
+        private Long id;
 
         public Product(String name, int price, DiscountPolicy discountPolicy) {
             Assert.hasText(name, "상품명은 필수입니다.");
@@ -61,10 +70,35 @@ public class ProductServiceTest {
             this.price = price;
             this.discountPolicy = discountPolicy;
         }
+
+
+        public void assignId(Long aLong) {
+            this.id = id;
+        }
     }
 
     private interface ProductPort {
 
         void save(final Product product);
+    }
+
+    private class ProductAdapter implements ProductPort {
+
+        private ProductRepository productRepository;
+
+        @Override
+        public void save(final Product product) {
+            productRepository.save(product);
+        }
+    }
+
+    private class ProductRepository {
+        private Map<Long, Product>persistence =new HashMap<>();
+        private Long sequence = 0L;
+
+        public void save(final Product product) {
+            product.assignId(++sequence);
+            persistence.put(proudct.getId(), product);
+        }
     }
 }
