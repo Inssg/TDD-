@@ -31,7 +31,7 @@ public class ProductApiTest extends ApiTest {
         Long productId = 1L;
 
         //상품조회
-        final var response = ProductSteps.상품수정요청(productId);
+        final var response = ProductSteps.상품조회요청(productId);
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getString("name")).isEqualTo("상품명");
