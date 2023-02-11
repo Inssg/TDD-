@@ -33,11 +33,16 @@ public class OrderServiceTest {
 
     @Test
     void 상품주문() {
+        final CreateOrderRequest request = 상품주문요청_생성();
+
+        orderService.createOrder(request);
+    }
+
+    private static CreateOrderRequest 상품주문요청_생성() {
         final Long productId = 1L;
         final int quantity =2;
         final CreateOrderRequest request = new CreateOrderRequest(productId, quantity);
-
-        orderService.createOrder(request);
+        return request;
     }
 
 }
